@@ -20,17 +20,17 @@ void ArduinoUno::init() const {
     uint8_t portd = 0x00;
 
     for (int i = 0; i < 8; i++) {
-        if (ports[PB].pin[i].mode == Mode::OUTPUT) {
+        if (ports[PB].pin[i].getMode() == Mode::OUTPUT) {
             ddrb |= (1 << i);
         } else {
             portb |= (1 << i);
         }
-        if (ports[PC].pin[i].mode == Mode::OUTPUT) {
+        if (ports[PC].pin[i].getMode() == Mode::OUTPUT) {
             ddrc |= (1 << i);
         } else {
             portc |= (1 << i);
         }
-        if (ports[PD].pin[i].mode == Mode::OUTPUT) {
+        if (ports[PD].pin[i].getMode() == Mode::OUTPUT) {
             ddrd |= (1 << i);
         } else {
             portd |= (1 << i);
@@ -47,24 +47,24 @@ void ArduinoUno::init() const {
 
 void ArduinoUno::update() const {
     for (int i = 0; i < 8; i++) {
-        if (ports[PB].pin[i].mode == Mode::OUTPUT) {
-            if (ports[PB].pin[i].value == Value::HIGH) {
+        if (ports[PB].pin[i].getMode() == Mode::OUTPUT) {
+            if (ports[PB].pin[i].getValue() == Value::HIGH) {
                 PORTB |= (1 << i);
             } else {
                 PORTB &= ~(1 << i);
             }
         }
 
-        if (ports[PC].pin[i].mode == Mode::OUTPUT) {
-            if (ports[PC].pin[i].value == Value::HIGH) {
+        if (ports[PC].pin[i].getMode() == Mode::OUTPUT) {
+            if (ports[PC].pin[i].getValue() == Value::HIGH) {
                 PORTC |= (1 << i);
             } else {
                 PORTC &= ~(1 << i);
             }
         }
 
-        if (ports[PD].pin[i].mode == Mode::OUTPUT) {
-            if (ports[PD].pin[i].value == Value::HIGH) {
+        if (ports[PD].pin[i].getMode() == Mode::OUTPUT) {
+            if (ports[PD].pin[i].getValue() == Value::HIGH) {
                 PORTD |= (1 << i);
             } else {
                 PORTD &= ~(1 << i);
@@ -74,39 +74,43 @@ void ArduinoUno::update() const {
 }
 
 void ArduinoUno::setOutput(int port, int pin) {
-    ports[port].pin[pin].mode = Mode::OUTPUT;
+    ports[port].pin[pin].setMode(Mode::OUTPUT);
     init();
 }
 
 void ArduinoUno::setInput(int port, int pin) {
-    ports[port].pin[pin].mode = Mode::INPUT;
+    ports[port].pin[pin].setMode(Mode::INPUT);
     init();
 };
 
 void ArduinoUno::turnOnLED() {
-    ports[PB].pin[5].value = Value::HIGH;
+    ports[PB].pin[5].setValue(Value::HIGH);
     update();
 }
 
 void ArduinoUno::turnOffLED() {
-    ports[PB].pin[5].value = Value::LOW;
+    ports[PB].pin[5].setValue(Value::LOW);
     update();
 }
 
 void ArduinoUno::setPin(int port, int pin, Value value) {
-    ports[port].pin[pin].value = value;
+    ports[port].pin[pin].setValue(value);
     update();
 }
 
 Value ArduinoUno::getPin(int port, int pin) {
     switch (port) {
         case PB:
-            return ports[port].pin[pin].value = static_cast<Value>((PINB & (1 << pin)));
+            return ports[port].pin[pin].setValue(static_cast<Value>((PINB & (1 << pin))));
         case PC:
-            return ports[port].pin[pin].value = static_cast<Value>((PINC & (1 << pin)));
+            return ports[port].pin[pin].setValue(static_cast<Value>((PINC & (1 << pin))));
         case PD:
-            return ports[port].pin[pin].value = static_cast<Value>((PIND & (1 << pin)));
+            return ports[port].pin[pin].setValue(static_cast<Value>((PIND & (1 << pin))));
         default: return Value::LOW;
     }
 
+}
+
+void ArduinoUno::addComponent(Component *component) {
+    components.addItem(component);
 }

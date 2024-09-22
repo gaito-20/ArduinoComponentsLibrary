@@ -1,29 +1,9 @@
 #ifndef ARDUINOUNO_H
 #define ARDUINOUNO_H
 
-enum class Mode {
-    INPUT,
-    OUTPUT
-};
-
-enum class Value {
-    LOW,
-    HIGH
-};
-
-struct Pin {
-    Mode mode;
-    Value value;
-    Pin() {
-        mode = Mode::OUTPUT;
-        value = Value::LOW;
-    }
-};
-
-
-struct Port {
-    Pin pin[8];
-};
+#include <Component.h>
+#include <Hardware.h>
+#include <utils.h>
 
 #define PB 0
 #define PC 1
@@ -33,6 +13,7 @@ struct Port {
 class ArduinoUno {
 private:
     Port ports[ARDUINO_UNO_NUMBER_PORTS];
+    List<Component> components;
 
     ArduinoUno();
     static ArduinoUno* arduinoUno;
@@ -59,6 +40,7 @@ public:
     void setPin(int port, int pin, Value value);
     Value getPin(int port, int pin);
 
+    void addComponent(Component* component);
 };
 
 

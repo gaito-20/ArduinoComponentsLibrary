@@ -1,3 +1,5 @@
+#ifndef PIO_UNIT_TESTING
+
 #include "PAC/gpio.h"
 #include <util/delay.h>
 
@@ -11,3 +13,5 @@ int main() {
         _delay_ms(1000);
     }
 }
+
+#endif // PIO_UNIT_TESTING

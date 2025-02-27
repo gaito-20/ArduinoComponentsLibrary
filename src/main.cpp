@@ -1,15 +1,19 @@
 #ifndef PIO_UNIT_TESTING
 
-#include "PAC/gpio.h"
+#include "HAL/hal_gpio.h"
 #include <util/delay.h>
 
+
 int main() {
-    gpio_init(gpio13, 1);
+
+    IO::GPIO led{gpio13};
+
+    led.setMode(IO::PinMode::OUTPUT);
 
     while (1) {
-        gpio_set(gpio13, 1);
+        led.setValue(IO::PinValue::HIGH);
         _delay_ms(1000);
-        gpio_set(gpio13, 0);
+        led.setValue(IO::PinValue::LOW);
         _delay_ms(1000);
     }
 }

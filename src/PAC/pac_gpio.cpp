@@ -1,4 +1,4 @@
-#include "PAC/gpio.h"
+#include "PAC/pac_gpio.h"
 
 void gpio_init(gpio_t& gpio, uint8_t mode)
 {

@@ -14,6 +14,11 @@ namespace IO {
         HIGH = 1
     };
 
+    enum class InternalPullup {
+        OFF = 0,
+        ON = 1
+    };
+
     class GPIO {
         gpio_t pin;
     public:
@@ -29,6 +34,11 @@ namespace IO {
 
         PinValue getValue() {
             return static_cast<PinValue>(gpio_get(pin) != 0);
+        }
+
+        void setInput(InternalPullup pullup = InternalPullup::OFF) {
+            setMode(PinMode::INPUT);
+            gpio_set(pin, static_cast<uint8_t>(pullup));
         }
     };
 }
